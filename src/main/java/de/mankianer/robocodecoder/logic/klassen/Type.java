@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Type {
 
-    enum Primitiv{
+    public enum Primitiv{
         NULL ("null", null),
         INT ("int", NULL.getType()),
         DOUBLE ("double", INT.getType()),

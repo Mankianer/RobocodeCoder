@@ -22,6 +22,31 @@ public class Value extends CodeGenerator{
         this.status = Status.UseLoad;
     }
 
+    public static Value getInt(int load)
+    {
+        return new Value("" + load, Type.Primitiv.INT.getType());
+    }
+
+    public static Value getDouble(double load)
+    {
+        return new Value("" + load, Type.Primitiv.DOUBLE.getType());
+    }
+
+    public static Value getNull()
+    {
+        return new Value("null", Type.Primitiv.NULL.getType());
+    }
+
+    public static Value getString(String load)
+    {
+        return new Value(load, Type.Primitiv.STRING.getType());
+    }
+
+    public static Value getChar(char load)
+    {
+        return new Value("" + load, Type.Primitiv.CHAR.getType());
+    }
+
     public void setStatusUse(){
         status = Status.Use;
     }
@@ -39,6 +64,8 @@ public class Value extends CodeGenerator{
         }
 
     }
+
+
 
     public void setStatusSet(Value value) throws TypePasstNichtExeption {
         if(type.isSubType(value.type))
@@ -58,9 +85,9 @@ public class Value extends CodeGenerator{
         switch (status)
         {
             case Init:
-                return type.getName() + " " + name + " = " + ((load.status == Status.Use) ? load.createCode() : "null") + ";";
+                return type.getName() + " " + name + " = " + ((load.status == Status.Use || load.status == Status.UseLoad) ? load.createCode() : "null");
             case Set:
-                return name + " = " + load.name + ";";
+                return name + " = " + load.name;
             case Use: case UseLoad:
                 return name;
         }
@@ -76,7 +103,7 @@ public class Value extends CodeGenerator{
                 return type != null && load != null && name != null && !name.isEmpty();
             case Set:
                 return load != null && load.status == Status.Use && load.isValid() && type != null && type.isSubType(load.type);
-            case Use:
+            case Use: case UseLoad:
                 return name != null && !name.isEmpty();
             case Error:
                 return false;
@@ -87,5 +114,9 @@ public class Value extends CodeGenerator{
 
     public Type getType() {
         return type;
+    }
+
+    public String getName() {
+        return name;
     }
 }

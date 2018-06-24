@@ -11,12 +11,12 @@ public class Parameter {
         this.values = values;
     }
 
-    public boolean isMatch(Parameter parameter)
+    public boolean isMatch(Parameter targetParameter)
     {
-        if(values.length == parameter.getValues().length)
+        if(values.length == targetParameter.getValues().length)
         {
             for (int i = 0; i < values.length; i++) {
-                if(!values[i].getType().equals(parameter.getValues()[i].getType()))
+                if(!targetParameter.getValues()[i].getType().isSubType(values[i].getType()))
                 {
                     return false;
                 }

@@ -2,17 +2,22 @@ package de.mankianer.robocodecoder.logic.klassen;
 
 import de.mankianer.robocodecoder.logic.klassen.Exeption.TypePasstNichtExeption;
 
-public abstract class Variabel {
+public class Variabel {
 
     private String name;
 
     private boolean isInit, isUsed;
 
     private Value value;
-    public Variabel(String name, Type primitivType) {
+    public Variabel(String name, String load, Type type) {
 
         this.name = name;
-        value = new Value(name, primitivType);
+        value = new Value(load, type);
+    }
+
+    public Variabel(String name, Value value){
+        this.name = name;
+        this.value = value;
     }
 
     public boolean isInit(){
@@ -23,15 +28,24 @@ public abstract class Variabel {
         return isUsed;
     }
 
-    public CodeGenerator getUseValue()
+    public Value getCallValue()
     {
         isUsed = true;
         Value ret = new Value(name, value.getType());
+        ret.setStatusUse();
         value.addSubGenerator(ret);
         return ret;
     }
 
-    public CodeGenerator getInitValue(Value value) throws TypePasstNichtExeption {
+    public Value getUseValue()
+    {
+        isUsed = true;
+        Value ret = new Value(value.getName(), value.getType());
+        value.addSubGenerator(ret);
+        return ret;
+    }
+
+    public Value getInitValue(Value value) throws TypePasstNichtExeption {
 
         isInit = true;
         Value ret = new Value(name, this.value.getType());
@@ -41,7 +55,7 @@ public abstract class Variabel {
     }
 
 
-    public  CodeGenerator getSetValue(Value value) throws TypePasstNichtExeption {
+    public  Value getSetValue(Value value) throws TypePasstNichtExeption {
         Value ret = new Value(name, this.value.getType());
         ret.setStatusSet(value);
         value.addSubGenerator(ret);
