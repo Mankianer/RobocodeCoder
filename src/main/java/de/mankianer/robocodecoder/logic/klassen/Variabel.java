@@ -9,7 +9,7 @@ public abstract class Variabel {
     private boolean isInit, isUsed;
 
     private Value value;
-    public Variabel(String name, PrimitivType primitivType) {
+    public Variabel(String name, Type primitivType) {
 
         this.name = name;
         value = new Value(name, primitivType);
@@ -26,7 +26,7 @@ public abstract class Variabel {
     public CodeGenerator getUseValue()
     {
         isUsed = true;
-        Value ret = new Value(name, value.getPrimitivType());
+        Value ret = new Value(name, value.getType());
         value.addSubGenerator(ret);
         return ret;
     }
@@ -34,7 +34,7 @@ public abstract class Variabel {
     public CodeGenerator getInitValue(Value value) throws TypePasstNichtExeption {
 
         isInit = true;
-        Value ret = new Value(name, this.value.getPrimitivType());
+        Value ret = new Value(name, this.value.getType());
         ret.setStatusInit(value);
         value.addSubGenerator(ret);
         return ret;
@@ -42,16 +42,16 @@ public abstract class Variabel {
 
 
     public  CodeGenerator getSetValue(Value value) throws TypePasstNichtExeption {
-        Value ret = new Value(name, this.value.getPrimitivType());
+        Value ret = new Value(name, this.value.getType());
         ret.setStatusSet(value);
         value.addSubGenerator(ret);
         return ret;
 
     }
 
-    public PrimitivType getType()
+    public Type getType()
     {
-        return value.getPrimitivType();
+        return value.getType();
     }
 
     public String getName() {
@@ -60,6 +60,6 @@ public abstract class Variabel {
 
     @Override
     public String toString() {
-        return "Variabel[type=" + value.getPrimitivType().getName() + "; name=" + name  + "]";
+        return "Variabel[type=" + value.getType().getName() + "; name=" + name  + "]";
     }
 }

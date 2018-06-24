@@ -8,7 +8,7 @@ public class Value extends CodeGenerator{
        Error, Init, Use, Set, UseLoad;
    }
 
-    private PrimitivType primitivType;
+    private Type type;
 
     private String name;
 
@@ -16,9 +16,9 @@ public class Value extends CodeGenerator{
 
     private Value load;
 
-    public Value(String load, PrimitivType primitivType) {
+    public Value(String load, Type type) {
         this.name = load;
-        this.primitivType = primitivType;
+        this.type = type;
         this.status = Status.UseLoad;
     }
 
@@ -27,7 +27,7 @@ public class Value extends CodeGenerator{
     }
 
     public void setStatusInit(Value value) throws TypePasstNichtExeption {
-        if(primitivType.isSubType(value.primitivType))
+        if(type.isSubType(value.type))
         {
             status = Status.Init;
             load = value;
@@ -35,13 +35,13 @@ public class Value extends CodeGenerator{
         }
         else
         {
-            throw new TypePasstNichtExeption(this, primitivType, value.primitivType);
+            throw new TypePasstNichtExeption(this, type, value.type);
         }
 
     }
 
     public void setStatusSet(Value value) throws TypePasstNichtExeption {
-        if(primitivType.isSubType(value.primitivType))
+        if(type.isSubType(value.type))
         {
             status = Status.Set;
             load = value;
@@ -49,7 +49,7 @@ public class Value extends CodeGenerator{
         }
         else
         {
-            throw new TypePasstNichtExeption(this, primitivType, value.primitivType);
+            throw new TypePasstNichtExeption(this, type, value.type);
         }
     }
 
@@ -58,7 +58,7 @@ public class Value extends CodeGenerator{
         switch (status)
         {
             case Init:
-                return primitivType.getName() + " " + name + " = " + ((load.status == Status.Use) ? load.createCode() : "null") + ";";
+                return type.getName() + " " + name + " = " + ((load.status == Status.Use) ? load.createCode() : "null") + ";";
             case Set:
                 return name + " = " + load.name + ";";
             case Use: case UseLoad:
@@ -73,9 +73,9 @@ public class Value extends CodeGenerator{
         switch (status)
         {
             case Init:
-                return primitivType != null && load != null && name != null && !name.isEmpty();
+                return type != null && load != null && name != null && !name.isEmpty();
             case Set:
-                return load != null && load.status == Status.Use && load.isValid() && primitivType != null && primitivType.isSubType(load.primitivType);
+                return load != null && load.status == Status.Use && load.isValid() && type != null && type.isSubType(load.type);
             case Use:
                 return name != null && !name.isEmpty();
             case Error:
@@ -85,7 +85,7 @@ public class Value extends CodeGenerator{
         return false;
     }
 
-    public PrimitivType getPrimitivType() {
-        return primitivType;
+    public Type getType() {
+        return type;
     }
 }
